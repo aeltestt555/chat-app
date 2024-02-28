@@ -28,7 +28,7 @@ export const ChatContextProvider= ({children, user})=>{
     }, [user]);
 
     useEffect(() => {
-       const newSocket = io('http://localhost:5000');  //TODO : remplacer par l'adresse du serve
+       const newSocket = io('https://chat-app-socketio-tbfp.onrender.com');  //TODO : remplacer par l'adresse du serve
         setSocket(newSocket);
 
         return () =>{

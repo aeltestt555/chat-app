@@ -1,7 +1,7 @@
 
 import axios from 'axios';
 
-export const baseUrl = 'http://localhost:3001/api';
+export const baseUrl = 'https://chat-app-1-ph3k.onrender.com/api';
 
 
 export const postRequest =  async (url, body )=>{

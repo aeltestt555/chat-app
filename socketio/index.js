@@ -1,7 +1,7 @@
 
 const { Server } = require('socket.io');
 const io = new Server({ 
-    cors: "http://localhost:3000" ,
+    cors: process.env.FRONTEND_URL ,
 })
 
 let onlineUsers = []
