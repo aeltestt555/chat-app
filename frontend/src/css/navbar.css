@@ -1,0 +1,59 @@
+
+body{
+    margin: auto 0;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+.navbarText{
+    display: flex;
+    color: rgb(255, 255, 255);
+}
+
+.navbar{
+    background-color: #1877F2;
+    padding: 17px;
+    font-size: 17px;
+    font-family: "popins", sans-serif;
+    margin-bottom: 20px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 18px 50px -10px;
+}
+.navbar-nav{
+    position: relative;
+}
+.navbar-text{
+    display: flex;
+    float: right;
+    color: #ffffff;
+}
+li{
+    list-style: none;
+    padding-left: 20px;
+    color: white;
+}
+
+.nav-link{
+    color: white;
+}
+.nav-link:focus{
+    color: white;
+    border-bottom: 1px solid white;
+}
+.nav-link:hover{
+    color: white;
+    border-bottom: 1px solid white;
+}
+.navbar-brand{
+    color: #ffffff;
+}
+.navbar-brand:focus{
+    color: #ffffff;
+}
+.navbar-brand:hover{
+    color: #ffffff;
+}
+#sendmsginput{
+    height: 40px;
+}
+#logout{
+    position: relative;
+    font-size: 15px;
+}
