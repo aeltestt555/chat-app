@@ -12,10 +12,10 @@ export default function PotentielChat() {
         
             {
                 potentielChat && potentielChat.map((u, index)=>(
-                        <span role='button' className='potentieluser' key={u._id}
+                        <div role='button' className='potentieluser' key={u._id}
                         onClick={() => createChat(user._id, u._id)}><span>{u.name}</span> <span className={
                           onlineUsers?.some((user)=>user?.userId === u?._id) ?
-                        "dot" : ""}></span></span>
+                        "dot" : ""}></span></div>
                 ))
             }
     </div>

@@ -19,24 +19,23 @@ export default function Chat() {
     onlineUsers} = useContext(ChatContext)
 
 
-  return (<div >
-
-    <div className='row container'  >
-    <div className='col-1'></div>
+  return (< >
+    <PotentielChat />
+    <div className='row container'  id='chat-container'>
     <div className='col-3' id='chats'>
-      <h2 style={{margin:'20px', borderBottom:'1px solid rgb(255,255,255, 0.6)', padding:'10px'}}>Contacts</h2>
+      <h2 id='contacttext' style={{margin:'20px', borderBottom:'1px solid rgb(255,255,255, 0.6)', padding:'10px'}}>Contacts</h2>
 
     {
       userChatsError?.error &&
        <div className='alert alert-danger'>
-       error :{userChatsError.message}
+       error :{userChatsError?.message}
        </div>
         
     }
 
     {
       userChats?.length<1  ? null :
-      <ul>
+      <div id='usersList'>
         {isUserChatsLoading && <p>loading chat ... </p>}
         {
           userChats?.map((item, index)=>(
@@ -46,23 +45,14 @@ export default function Chat() {
             
           ))
         }
-      </ul>
+      </div>
     }
     </div>
-
-      <div className='col-6' id='current-chat' >
-      <div className='container'>
+      <div className='col-7' id='current-chat' >
         <ChatBox />
       </div>
-        
-      </div>
-    <div className='col-2'>
-    <div className='container'>
-    <PotentielChat />
     </div>
-    </div>
-    </div>
-  </div>
+  </>
     
   )
 

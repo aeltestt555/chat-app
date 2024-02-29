@@ -13,8 +13,8 @@ export default function Login() {
   return (
     <div className='login-form'>
     <div className='row'>
-  <div className='col-3'></div>
-      <div className='col-6'>
+  <div className='col-2'></div>
+      <div className='col-8'>
         <h1 className='h1-form'>Login </h1>
         <form onSubmit={loginUser} >
           <input type="email" className='loginregisterinput' name="email" placeholder='enter your email ..'  required
@@ -33,7 +33,7 @@ export default function Login() {
         </div>
         }
       </div>
-      <div className='col-3'></div>
+      <div className='col-2'></div>
         
       </div>
     </div>

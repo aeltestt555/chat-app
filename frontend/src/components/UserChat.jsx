@@ -48,7 +48,7 @@ export default function UserChat({chat , user}) {
         <div >
           <div className={isOnline ?"dot" : ""} style={{float:'right'}}></div>
         </div>
-              <div>{moment(latestMsg?.createdAt).calendar()}</div>
+              <div id='lastmsg-time'>{moment(latestMsg?.createdAt).calendar()}</div>
               <div>
                 <div className={thisUserNotifs?.length>0? "newmsgcount":""} >{thisUserNotifs?.length>0 && thisUserNotifs?.length}</div>
               </div>

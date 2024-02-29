@@ -9,8 +9,8 @@ export default function Register() {
     <div className='register-form'>
       
       <div className='row'>
-      <div className='col-3'></div>
-      <div className='col-6'>
+      <div className='col-2'></div>
+      <div className='col-8'>
       <h1 className='h1-form'>Register</h1>
         <form onSubmit={registerUser}>
                 <input type='text' className='loginregisterinput' name='name' placeholder='enter your name ...' onChange={(e)=>updateRegisterInfo({
@@ -35,7 +35,7 @@ export default function Register() {
               {registerError &&<div className='alert alert-danger'> {registerError?.message} </div>}
               
       </div>
-      <div className='col-3'></div>
+      <div className='col-2'></div>
       </div>
       
       {/* display any errors that occured during registration */}
