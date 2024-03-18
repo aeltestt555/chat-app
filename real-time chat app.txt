@@ -1,0 +1,58 @@
+
+
+technologies:
+reactjs frontend , axios for fetch data
+nodejs expressjs backend, cors, nodemon, react auth kit and jwt for auth
+socket.io librarie
+cloud.mongodb.com for mongodb database (calltestt22@hot.., mongodbbb123@) 
+css and bootstrap and reactjs components / responsive deisgn
+netlify for deploy
+
+
+git init
+git add .
+git commit -m "test"
+gti branch -M main
+git remote add origin https://github.com/aeltestt555/chat-app.git
+git push -u origin main
+
+
+ATLAS_URI  = mongodb+srv://chatappuser:JkCwX7SEBBm1HLGi@chatappdb.pnzynts.mongodb.net/chatappdb?retryWrites=true&w=majority
+JWT_SECRET_KEY = fhIJdGjKLUgfDfGH
+PORT = 3001
+
+SOCKETIO_PORT = 5000
+FRONTEND_URL = http://localhost:3000
+
+
+render.com
+github.cmo
+netifly.com
+
+
+
+https://www.youtube.com/watch?v=V0nYtnJ6y04&list=PL63c_Ws9ecIRZ6njHRi3cuCkNSfzqyLBn&index=19
+
+
+https://www.youtube.com/watch?v=KJBRw0bvjNI&list=PLSQi9CtBDLnNqmKdT7yiDUzzfbYDS4oLd&index=2
+
+https://www.youtube.com/watch?v=wr3VmbZdVA4
+
+https://www.youtube.com/watch?v=HwCqsOis894
+
+https://www.youtube.com/watch?v=ZVyIIyZJutM
+
+https://www.youtube.com/watch?v=o_UtxjDYb78
+
+https://www.youtube.com/watch?v=41KjvzKzm-I
+
+dashboard.render.com
+lap.game4w@../lap.game4w
+
+netifly 
+lap.gam.../lapgam...
+
+github 
+lap.gam.../lapgam...
+
+https://www.youtube.com/watch?v=Yqu3LzJ1d5Y

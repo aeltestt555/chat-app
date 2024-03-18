@@ -22,7 +22,7 @@ export default function Chat() {
   return (< >
     <PotentielChat />
     <div className='row container'  id='chat-container'>
-    <div className='col-3' id='chats'>
+    <div className='col-1' id='chats' >
       <h2 id='contacttext' style={{margin:'20px', borderBottom:'1px solid rgb(255,255,255, 0.6)', padding:'10px'}}>Contacts</h2>
 
     {
@@ -48,7 +48,7 @@ export default function Chat() {
       </div>
     }
     </div>
-      <div className='col-7' id='current-chat' >
+      <div className='col-6' id='current-chat'  >
         <ChatBox />
       </div>
     </div>
