@@ -1,3 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 body{
   font-family: "popins", sans-serif;
   background-color: blue;

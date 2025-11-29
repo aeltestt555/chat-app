@@ -1,0 +1,32 @@
+/* -----------------------------
+   GLOBAL RESETS & THEME COLORS
+------------------------------ */
+:root {
+    --primary: #2563eb;        /* blue-600 */
+    --primary-hover: #1e4ecf;
+    --bg-light: #f5f7fb;
+    --bg-card: #ffffff;
+    --text-dark: #212529;
+    --text-muted: #6c757d;
+    --border: #dfe3ea;
+    --radius: 14px;
+    --shadow: 0px 4px 14px rgba(0,0,0,0.07);
+  }
+  
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-light);
+    margin: 0;
+    padding: 0;
+    color: var(--text-dark);
+  }
+/* -----------------------------
+   MOBILE FRIENDLY
+------------------------------ */
+@media (max-width: 600px) {
+    #currentusername { font-size: 1.2rem; }
+    .chatbox { padding: 14px; }
+    #sendmessagecontainer { padding: 10px; }
+    .auth-card { padding: 28px 22px; }
+    .auth-title { font-size: 1.7rem; }
+  }

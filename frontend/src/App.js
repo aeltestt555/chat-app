@@ -11,6 +11,8 @@ import NavBar from './components/NavBar';
 import { AuthContext, AuthContextProvider } from './context/AuthContext';
 import Home from './pages/Home';
 import { ChatContextProvider } from './context/ChatContext';
+import './css/app-theme.css'
+
 
 
 function App() {
