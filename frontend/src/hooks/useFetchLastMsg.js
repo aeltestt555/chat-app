@@ -1,21 +1,36 @@
-import { useContext, useState,useEffect } from "react"
-import { ChatContext } from "../context/ChatContext"
+import { useContext, useState, useEffect } from "react";
+import { ChatContext } from "../context/ChatContext";
 import { baseUrl, getRequest } from "../utils/services";
 
-export const useFetchLastMsg = (chat)=>{
-    const {newMessage, notification }=useContext(ChatContext)
-    const [latestMsg, setLatestMsg] = useState(null);
+export const useFetchLastMsg = (chat) => {
+  const { newMessage } = useContext(ChatContext);
+  const [latestMsg, setLatestMsg] = useState(chat?.latestMsg || null);
 
-    useEffect(() => {
-        const getmsgs = async()=>{
-            const response = await getRequest(baseUrl+'/messages/'+chat?._id)
-            if(response.error){
-                return console.log('error getting messages', response.error);
-            }
-            const lastmsg = response[response?.length - 1]
-            setLatestMsg(lastmsg)
+  useEffect(() => {
+    if (!chat?._id) return;
+
+    const fetchLatestMessage = async () => {
+      try {
+        // Only fetch messages if we have no latestMsg stored
+        const response = await getRequest(`${baseUrl}/messages/${chat._id}`);
+        if (!response.error) {
+          const msg = response[response.length - 1];
+          setLatestMsg(msg);
         }
-        getmsgs()
-    }, [newMessage, notification]);
-    return { latestMsg };
-}
+      } catch (err) {
+        console.error("Error fetching latest message:", err);
+      }
+    };
+
+    // If a newMessage belongs to this chat → update last message instantly
+    if (newMessage?.chatId === chat?._id) {
+      setLatestMsg(newMessage);
+      return;
+    }
+
+    // Startup (first render)
+    fetchLatestMessage();
+  }, [chat, newMessage]);
+
+  return { latestMsg };
+};
