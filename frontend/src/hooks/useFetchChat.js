@@ -1,29 +1,31 @@
+// src/hooks/useFetchChat.js
+
 import { useEffect, useState } from "react";
 import { baseUrl, getRequest } from "../utils/services";
 
-export const useFetchChat= (chat, user) => {
-    const [recipientUser, setrecipientUser] = useState(null);
+export const useFetchChat = (chat, user) => {
+    const [recipientUser, setRecipientUser] = useState(null);
     const [error, setError] = useState(null);
 
-    const recipientId = chat?.members?.find((id) => id !==user?._id)
+    const recipientId = chat?.members?.find((id) => id !== user?._id);
 
     useEffect(() => {
-        
-        const getUser = async() => {
+        const getUser = async () => {
+            if (!recipientId) return;
 
-            if(!recipientId) return null
+            const response = await getRequest(baseUrl + '/users/find/' + recipientId);
 
-            const response = await getRequest(baseUrl+'/users/find/'+recipientId);
-
-            if(response.error){
-                return setError(error)
+            if (response.error) {
+                return setError(response.error);
             }
-            setrecipientUser(response)
+            setRecipientUser(response);
         }
-        getUser()
+
+        if (recipientId) {
+            getUser();
+        }
     }, [recipientId]);
 
-    return { recipientUser }
-
-}
-
+    // The hook now returns the entire recipientUser object, which includes lastSeen
+    return { recipientUser, error };
+};

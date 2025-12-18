@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
     'name' :{type:'string', required:true, minLength:3, maxLength: 20},
     'email' :{type:'string', required:true, minLength:3, maxLength: 20, unique: true},
     'password' :{type:'string', required:true, minLength: 8},
-
+    'lastSeen' : { type: Date, default: null }
 }, {
     timestamps: true,
 })
