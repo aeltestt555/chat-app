@@ -5,45 +5,39 @@ import { useFetchChat } from "../hooks/useFetchChat";
 
 export default function ChatBox({ onToggleContacts }) {
   const { user } = useContext(AuthContext);
-  const { currentChat, messages, isMessagesLoading, sendtextmessage, onlineUsers } = useContext(ChatContext); // Get onlineUsers from context
+  const { currentChat, messages, isMessagesLoading, sendtextmessage, onlineUsers } = useContext(ChatContext);
   const { recipientUser } = useFetchChat(currentChat, user);
   const [textMessage, setTextMessage] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  // Note: The 'isUserTyping' state was for a local indicator.
+  // If you want to show the *other* user's typing status, you need that from your ChatContext.
   const [isUserTyping, setIsUserTyping] = useState(false);
-  // --- REMOVE THE SIMULATED STATE ---
-  // const [lastSeen, setLastSeen] = useState(null); 
   const scroll = useRef();
   const typingTimeoutRef = useRef(null);
 
-  // --- CALCULATE ONLINE STATUS FROM CONTEXT ---
-  // The recipientUser object from the DB doesn't have an 'isOnline' property.
-  // We calculate it by checking if their ID is in the onlineUsers array from ChatContext.
   const isRecipientOnline = onlineUsers?.some(u => u.userId === recipientUser?._id);
 
-  // Handle typing indicator
-  const handleInputChange = (e) => {
-    setTextMessage(e.target.value);
+  // const handleInputChange = (e) => {
+  //   setTextMessage(e.target.value);
     
-    if (!isUserTyping) {
-      setIsUserTyping(true);
-    }
+  //   if (!isUserTyping) {
+  //     setIsUserTyping(true);
+  //   }
     
-    if (typingTimeoutRef.current) {
-      clearTimeout(typingTimeoutRef.current);
-    }
+  //   if (typingTimeoutRef.current) {
+  //     clearTimeout(typingTimeoutRef.current);
+  //   }
     
-    typingTimeoutRef.current = setTimeout(() => {
-      setIsUserTyping(false);
-    }, 3000);
-  };
+  //   typingTimeoutRef.current = setTimeout(() => {
+  //     setIsUserTyping(false);
+  //   }, 3000);
+  // };
 
-  // Add emoji to message
   const addEmoji = (emoji) => {
     setTextMessage(prev => prev + emoji);
     setShowEmojiPicker(false);
   };
 
-  // Format last seen (this function is already correct)
   const formatLastSeen = (date) => {
     if (!date) return "";
     const now = new Date();
@@ -56,23 +50,38 @@ export default function ChatBox({ onToggleContacts }) {
     return `last seen on ${lastSeenDate.toLocaleDateString()}`;
   };
 
+  // *** UPDATED handleSubmit function with a safety check ***
+  const handleSubmit = async (e) => {
+    // This check prevents the error if 'e' is not a valid event object.
+    if (e && e.preventDefault) {
+      e.preventDefault();
+    }
+
+    if (textMessage.trim() === "") return;
+
+    // Ensure currentChat and user exist before trying to send
+    if (!currentChat?._id || !user?._id) {
+        console.error("Cannot send message: Chat or user ID is missing.");
+        return;
+    }
+
+    await sendtextmessage(currentChat._id, user._id, textMessage);
+    setTextMessage("");
+  };
+
   useEffect(() => {
     scroll.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // --- REMOVE THE SIMULATED USE EFFECT ---
-  // The real lastSeen time now comes from the recipientUser object fetched from the backend.
-  // useEffect(() => {
-  //   if (recipientUser) {
-  //     const randomTime = new Date();
-  //     randomTime.setMinutes(randomTime.getMinutes() - Math.floor(Math.random() * 120));
-  //     setLastSeen(randomTime);
-  //   }
-  // }, [recipientUser]);
-
   if (!recipientUser) return <p className="chat-empty">Select a conversation to start chatting</p>;
   if (isMessagesLoading) return <p className="chat-empty">Loading messages…</p>;
 
+
+  const emojis = [
+  "😀", "😃", "😄", "😁", "😆", "😅", "🤣", "😂", "🙂", "🙃", "😉", "😊", "😇", "🥰", "😍", "🤩", "😘", "😗", "😚", "😙",
+  "😋", "😛", "😜", "🤪", "😝", "🤑", "🤗", "🤭", "🤫", "🤔", "🤐", "🤨", "😐", "😑", "😶", "😏", "😒", "🙄", "😬", "🤥",
+  "😌", "😔", "😪", "🤤", "😴", "😷", "🤒", "🤕", "🤢", "🤮", "🤧", "🥵", "🥶", "🥴", "😵", "🤯", "🤠", "🥳", "😎", "🤓", "🧐"
+];
   return (
     <>
       <div className="chat-wrapper">
@@ -88,13 +97,11 @@ export default function ChatBox({ onToggleContacts }) {
           <div className="recipient-info">
             <div className="recipient-avatar">
               {recipientUser?.name?.[0]?.toUpperCase()}
-              {/* --- USE THE CALCULATED ONLINE STATUS --- */}
               <span className={`status-indicator ${isRecipientOnline ? 'online' : ''}`}></span>
             </div>
             <div className="recipient-details">
               <div className="recipient-name">{recipientUser?.name}</div>
               <div className="recipient-status">
-                {/* --- USE THE REAL LAST SEEN FROM THE USER OBJECT --- */}
                 {isRecipientOnline ? "Active now" : formatLastSeen(recipientUser?.lastSeen)}
               </div>
             </div>
@@ -117,8 +124,96 @@ export default function ChatBox({ onToggleContacts }) {
         </div>
         
         <div className="chat-body">
-          {/* ... (The rest of your component code for messages, input, etc. remains the same) ... */}
+          {messages.map((message, index) => {
+            let showDateDivider = false;
+            if (index === 0) {
+              showDateDivider = true;
+            } else {
+              const prevDate = new Date(messages[index - 1].createdAt).toDateString();
+              const currentDate = new Date(message.createdAt).toDateString();
+              if (prevDate !== currentDate) {
+                showDateDivider = true;
+              }
+            }
+
+            return (
+              <React.Fragment key={message._id}>
+                {showDateDivider && (
+                  <div className="date-divider">
+                    <span>{new Date(message.createdAt).toDateString()}</span>
+                  </div>
+                )}
+                <div className={`chat-message-container ${message.senderId === user._id ? "self" : "other"}`}>
+                  <div className="chat-message">
+                    <div className="chat-msg-text">{message.text}</div>
+                    <div className="chat-msg-info">
+                      <span>{new Date(message.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                      {message.senderId === user._id && (
+                        <div className="message-status">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </React.Fragment>
+            );
+          })}
+
+          {/* Typing Indicator */}
+          {isUserTyping && (
+            <div className="chat-message-container other">
+              <div className="typing-indicator">
+                <div className="typing-dot"></div>
+                <div className="typing-dot"></div>
+                <div className="typing-dot"></div>
+              </div>
+            </div>
+          )}
+
+          <div ref={scroll}></div>
         </div>
+
+        {/* *** CRITICAL: Check that this part matches exactly *** */}
+        <form onSubmit={(e)=>sendtextmessage(e, textMessage, user, currentChat._id, setTextMessage)} className="chat-input-wrapper">
+          <button type="button" className="attachment-btn" title="Attach file">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
+            </svg>
+          </button>
+          <div className="input-container">
+            <input
+              type="text"
+              className="chat-input"
+              placeholder="Type a message..."
+              value={textMessage}
+              onChange={e=>setTextMessage(e.target.value)}
+            />
+            <button type="button" className="emoji-btn" onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
+              😊
+            </button>
+            {showEmojiPicker && (
+              <div className="emoji-picker">
+                <div className="emoji-grid">
+            {emojis.map((emoji, index) => (
+              <button key={index} type="button" className="emoji-item" onClick={() => addEmoji(emoji)}>
+                {emoji}
+              </button>
+            ))}
+          </div>
+              </div>
+              
+            )}
+          </div>
+          <button type="submit" className="chat-send-btn" disabled={!textMessage.trim()}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+        </form>
       </div>
 
       <style>{`
@@ -217,7 +312,6 @@ export default function ChatBox({ onToggleContacts }) {
           color: #4f46e5;
         }
 
-        /* Add this new style for the menu toggle button */
         .menu-toggle-btn {
           background: none;
           border: none;
@@ -226,7 +320,7 @@ export default function ChatBox({ onToggleContacts }) {
           padding: 8px;
           margin-right: 8px;
           border-radius: 50%;
-          display: none; /* Hidden by default */
+          display: none;
           align-items: center;
           justify-content: center;
           transition: background-color 0.2s;
@@ -507,7 +601,6 @@ export default function ChatBox({ onToggleContacts }) {
             right: 10px;
           }
 
-          /* Show the menu toggle button on mobile */
           .menu-toggle-btn {
             display: flex;
           }

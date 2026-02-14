@@ -40,3 +40,25 @@ export const getRequest = async(url)  => {
     }
     return data;
 }
+
+export const putRequest = async (url, body) => {
+    const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("user")}` // Or however you handle auth tokens
+        },
+        body,
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        let message = "An error occurred...";
+        if (data?.message) {
+            message = data.message;
+        }
+        return { error: true, message };
+    }
+    return data;
+};
